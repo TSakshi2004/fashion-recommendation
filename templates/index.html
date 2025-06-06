@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Fashion Recommender</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #d4f1f9, #c0eaff, #e0f7ff);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 40px 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            background: linear-gradient(to bottom, #ffffff, #f7fafd);
+            padding: 40px 50px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-weight: 800;
+            color: #0a2e4f;
+            margin-bottom: 30px;
+            text-align: center;
+            letter-spacing: 1px;
+            animation: fadeInDown 1s ease-in-out;
+        }
+
+        @keyframes fadeInDown {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        form {
+            margin-bottom: 50px;
+        }
+
+        select.form-select {
+            border-radius: 50px;
+            padding: 14px 22px;
+            font-size: 1rem;
+            border: 2px solid #b0d4f1;
+            transition: all 0.3s ease;
+        }
+
+        select.form-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 10px #007bff88;
+            outline: none;
+        }
+
+        button.btn-custom {
+            background: linear-gradient(to right, #00aaff, #007bff);
+            color: white;
+            border-radius: 50px;
+            font-weight: 600;
+            padding: 14px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: none;
+            width: 100%;
+        }
+
+        button.btn-custom:hover {
+            background: linear-gradient(to right, #0088dd, #006be0);
+            box-shadow: 0 0 12px #00aaff80;
+        }
+
+        .recommendation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            background: linear-gradient(to top right, #ffffff, #f3f9fe);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #003366;
+            margin-bottom: 10px;
+        }
+
+        .card-text {
+            color: #333;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+        }
+
+        .price {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #007bff;
+            margin-top: 10px;
+        }
+
+        /* Tooltip */
+        .card::after {
+            content: "Click to view more!";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #007bff;
+            color: white;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover::after {
+            opacity: 1;
+        }
+
+        @media (max-width: 575px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="bi bi-stars"></i> Fashion Item Recommender <i class="bi bi-stars"></i></h1>
+
+        <form method="POST" class="row g-3 align-items-center justify-content-center">
+            <div class="col-12 col-md-8">
+                <select name="item_name" class="form-select" required>
+                    <option value="" disabled selected>-- Select a Fashion Item --</option>
+                    {% for item in items %}
+                        <option value="{{ item }}" {% if item == selected_item %}selected{% endif %}>{{ item }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12 col-md-2">
+                <button type="submit" class="btn btn-custom"><i class="bi bi-search"></i> Recommend</button>
+            </div>
+        </form>
+
+        {% if recommendations %}
+            <h2 class="mb-4">👗 Top Picks for <strong>{{ selected_item }}</strong>:</h2>
+            <div class="recommendation-grid">
+                {% for rec in recommendations %}
+                    <div class="card" tabindex="0">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-bag-heart-fill"></i> {{ rec['Name'] }}</h5>
+                            <p class="card-text"><strong>Category:</strong> {{ rec['Category'] }}</p>
+                            <p class="card-text"><strong>Color:</strong> {{ rec['Color'] }}</p>
+                            <p class="card-text"><strong>Style:</strong> {{ rec['Style'] }}</p>
+                            <p class="price">₹{{ rec['Price'] }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
