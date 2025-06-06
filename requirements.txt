@@ -1,8 +1,5 @@
-numpy
-pandas
-flask
-scikit-learn
-Flask==2.2.2
-pandas
-numpy
-gunicorn
+flask==2.3.3
+gunicorn==21.2.0
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.4.2
