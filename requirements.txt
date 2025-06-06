@@ -5,3 +5,4 @@ scikit-learn
 Flask==2.2.2
 pandas
 numpy
+gunicorn
